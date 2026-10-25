@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+</head>
+<body>
+    <h1>User Profile</h1>
+    <p id="name"></p>
+    <p id="age"></p>
+    <p id="monthsOld"></p>
+    <p id="hobbiesCount"></p>
+
+    <h2>Create / Update Profile</h2>
+    <form id="profileForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="number" id="birthYear" placeholder="Birth Year" required>
+        <button type="submit">Create / Update Profile</button>
+    </form>
+
+    <h2>Hobbies</h2>
+    <ul id="hobbiesList"></ul>
+
+    <input type="text" id="newHobby" placeholder="Enter a hobby">
+    <button type="button" id="addItem">Add Item</button>
+    <button type="button" id="removeItem">Remove Item</button>
+
+    <script>
+        const userProfile = {
+            name: "Ilyas Amangeldiyev",
+            birthYear: 2008,
+            isDeveloper: true,
+            hobbies: ["Coding", "Building projects", "LARPing"]
+        };
+
+        function displayProfile() {
+            const currentYear = new Date().getFullYear();
+            const age = currentYear - userProfile.birthYear;
+            const monthsOld = age * 12;
+
+            document.getElementById("name").textContent = "Name: " + userProfile.name;
+            document.getElementById("age").textContent = "Age: " + age;
+            document.getElementById("monthsOld").textContent = "Months old: " + monthsOld;
+            document.getElementById("hobbiesCount").textContent = "Total hobbies: " + userProfile.hobbies.length;
+        }
+
+        document.getElementById("profileForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            userProfile.name = document.getElementById("username").value;
+            userProfile.birthYear = Number(document.getElementById("birthYear").value);
+
+            displayProfile();
+        });
+
+        const hobbiesList = document.getElementById("hobbiesList");
+
+        function addHobby(hobby) {
+            const li = document.createElement("li");
+            li.textContent = hobby;
+            hobbiesList.appendChild(li);
+        }
+
+        userProfile.hobbies.forEach(addHobby);
+
+        document.getElementById("addItem").addEventListener("click", function() {
+            const input = document.getElementById("newHobby");
+            const hobby = input.value.trim();
+
+            if (hobby) {
+                userProfile.hobbies.push(hobby);
+                addHobby(hobby);
+                input.value = "";
+                displayProfile();
+            }
+        });
+
+        document.getElementById("removeItem").addEventListener("click", function() {
+            if (userProfile.hobbies.length > 0) {
+                userProfile.hobbies.pop();
+                hobbiesList.lastElementChild.remove();
+                displayProfile();
+            }
+        });
+
+        displayProfile();
+    </script>
+</body>
+</html>
